@@ -1,67 +1,51 @@
-# # Transposition Cipher
-# # !pip install pyperclip
+import math
 
-# import math
-
-# plainttext = input("Enter your plain text: ")
-# key = int(input("Enter key: "))
-# ciphertext = [''] * key
-
-
-# for column in range(key):
-#     pointer = column;
-#     while pointer < len(plainttext):
-#         ciphertext[column] += plainttext[pointer]
-#         pointer+=key
-
-# print(''.join(ciphertext))
-
-
-# def decryptMessage(key, message):
-#     numOfColumns = int(math.ceil(len(message) / key))
-#     numOfRows = key
-#     numOfShadedBoxes = (numOfColumns * numOfRows) - len(message)
-
-#     text = [''] * numOfColumns
-#     column = 0
-#     row = 0
-
-#     for symbol in message:
-#         text[column] += symbol
-#         column += 1
-#         if (column == numOfColumns) or (column == numOfColumns - 1 and row >= numOfRows - numOfShadedBoxes):
-#             column = 0
-#             row += 1
-
-#     return ''.join(text)
-
-
-# myMessage = input("Enter cipher text: ")
-# myKey = int(input("Enter key: "))
-# text = decryptMessage(myKey, myMessage)
-# print(text)
-# # pyperclip.copy(text)
-
-
-
-
+ 
+def main():
+    message = input("Enter message: ")
+    key = int(input("Enter key [2-%s]: " % (len(message) - 1)))
+    mode = input("Encryption/Decryption [e/d]: ")
+ 
+    if mode.lower().startswith("e"):
+        text = encryptMessage(key, message)
+    elif mode.lower().startswith("d"):
+        text = decryptMessage(key, message)
+ 
+    print("Output:\n%s" % (text + "|"))
+ 
+ 
 def encryptMessage(key, message):
-   ciphertext = [''] * key
-   
-   for col in range(key):
-      position = col
-      while position < len(message):
-        ciphertext[col] += message[position]
-        position += key
-      return ''.join(ciphertext)
-
-
-
-myMessage = 'Hello World'
-
-myKey = 4
-ciphertext = encryptMessage(myKey, myMessage)
-
-print("Cipher Text is")
-print(ciphertext + '|')
-# pyperclip.copy(ciphertext)
+    cipherText = [""] * key
+    for col in range(key):
+        pointer = col
+        while pointer < len(message):
+            cipherText[col] += message[pointer]
+            pointer += key
+    return "".join(cipherText)
+ 
+ 
+def decryptMessage(key, message):
+    numCols = math.ceil(len(message) / key)
+    numRows = key
+    numShadedBoxes = (numCols * numRows) - len(message)
+    plainText = [""] * numCols
+    col = 0
+    row = 0
+ 
+    for symbol in message:
+        plainText[col] += symbol
+        col += 1
+ 
+        if (
+            (col == numCols)
+            or (col == numCols - 1)
+            and (row >= numRows - numShadedBoxes)
+        ):
+            col = 0
+            row += 1
+ 
+    return "".join(plainText)
+ 
+ 
+if __name__ == "__main__":
+    main()
